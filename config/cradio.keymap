@@ -48,6 +48,12 @@
 #define LOCK_MAC  LC(LG(Q))   /* macOS: Ctrl+Cmd+Q (unchanged by the swap) */
 #define LOCK_PC   LG(L)       /* Windows / Linux: Win/Super+L */
 
+/* macOS screenshots (Ctrl here = Cmd after the swap) */
+#define SHOT_FULL LC(LS(N3))        /* Cmd+Shift+3: full screen */
+#define SHOT_SEL  LC(LS(N4))        /* Cmd+Shift+4: selection */
+#define SHOT_CLIP LC(LG(LS(N4)))    /* Cmd+Ctrl+Shift+4: selection to clipboard */
+#define SHOT_BAR  LC(LS(N5))        /* Cmd+Shift+5: screenshot toolbar */
+
 / {
     behaviors {
         /* Timeless home-row mods: left hand triggers hold only with right-hand keys or thumbs */
@@ -154,17 +160,17 @@
             >;
         };
 
-        /* NAV — hold Space. Arrows right; plain mods + shortcuts left.
-         * Redo  SelA Find Save NewT|  ·   Home PgDn PgUp End
-         *  ⇧    ⌘    ⌥    ⌃    ·   | CapsW ←    ↓    ↑    →
+        /* NAV — hold Space. Arrows right on the QWERTY HJKL positions; plain mods + shortcuts left.
+         * Redo  SelA Find Save NewT| Home PgDn PgUp End   ·
+         *  ⇧    ⌘    ⌥    ⌃    ·   |  ←    ↓    ↑    →    ·
          * Undo  Cut  Copy Paste(NUM)| ⇧Tab  ·    ·   Del   ·
          * (24 stays transparent so NAV → NUM reaches FN)
          */
         nav_layer {
             display-name = "Nav";
             bindings = <
-&kp S_REDO    &kp S_SELALL   &kp S_FIND    &kp S_SAVE     &kp S_NEWTAB    &none          &kp HOME    &kp PG_DN    &kp PG_UP   &kp END
-&kp LSHFT     &kp LGUI       &kp LALT      &kp LCTRL      &none           &caps_word     &kp LEFT    &kp DOWN     &kp UP      &kp RIGHT
+&kp S_REDO    &kp S_SELALL   &kp S_FIND    &kp S_SAVE     &kp S_NEWTAB    &kp HOME       &kp PG_DN   &kp PG_UP    &kp END     &none
+&kp LSHFT     &kp LGUI       &kp LALT      &kp LCTRL      &none           &kp LEFT       &kp DOWN    &kp UP       &kp RIGHT   &none
 &kp S_UNDO    &kp S_CUT      &kp S_COPY    &kp S_PASTE    &trans          &kp LS(TAB)    &none       &none        &kp DEL     &none
                              &trans        &trans                         &trans         &trans
             >;
@@ -176,6 +182,8 @@
          *  !    (    )    =    &   |  ·    ·    ;    :    ?
          *  ~    {    }    $    |   | (held) ·   *    /    >
          *           ⌫/⇧   @        |  _   ⏎/⇧
+         * If ` comes out as § (and ~ as ±) on macOS, the Mac thinks this is an ISO
+         * keyboard: set the keyboard type to ANSI in System Settings › Keyboard.
          */
         sym_layer {
             display-name = "Sym";
@@ -219,18 +227,20 @@
             >;
         };
 
-        /* SYS — hold either pinky-bottom key; mirrored so the other hand does the action.
-         * BT0  BT1  BT2  BT3  BT4  | BT0  BT1  BT2  BT3  BT4
-         * USB  BLE  Tog LkMac LkPC | LkPC LkMac Tog BLE  USB
-         *(held) Clr Boot Rst   ·   |  ·   Rst  Boot Clr (held)
-         * Reset/bootloader act on the half they're pressed on, hence the mirror.
+        /* SYS — hold either pinky-bottom key; the other hand does the action.
+         * BT0  BT1  BT2  BT3  BT4  |  ·   Shot  Sel  Clip  Bar
+         * USB  BLE  Tog LkMac LkPC |  ·  BTPrv BTNxt  ·    ·
+         *(held) Clr Boot Rst   ·   |  ·   Rst  Boot   ·  (held)
+         * Hold 29 for connections (left), 20 for screenshots / BT cycling (right).
+         * Only reset/bootloader act on the half they're pressed on, so they're on
+         * both halves; &bt, &out and &kp run on the central half from either side.
          */
         sys_layer {
             display-name = "Sys";
             bindings = <
-&bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4
-&out OUT_USB   &out OUT_BLE   &out OUT_TOG   &kp LOCK_MAC   &kp LOCK_PC       &kp LOCK_PC    &kp LOCK_MAC   &out OUT_TOG   &out OUT_BLE   &out OUT_USB
-&trans         &bt BT_CLR     &bootloader    &sys_reset     &none             &none          &sys_reset     &bootloader    &bt BT_CLR     &trans
+&bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &none          &kp SHOT_FULL  &kp SHOT_SEL   &kp SHOT_CLIP  &kp SHOT_BAR
+&out OUT_USB   &out OUT_BLE   &out OUT_TOG   &kp LOCK_MAC   &kp LOCK_PC       &none          &bt BT_PRV     &bt BT_NXT     &none          &none
+&trans         &bt BT_CLR     &bootloader    &sys_reset     &none             &none          &sys_reset     &bootloader    &none          &trans
                               &none          &none                            &none          &none
             >;
         };
