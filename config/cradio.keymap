@@ -53,6 +53,7 @@
 #define SHOT_SEL  LC(LS(N4))        /* Cmd+Shift+4: selection */
 #define SHOT_CLIP LC(LG(LS(N4)))    /* Cmd+Ctrl+Shift+4: selection to clipboard */
 #define SHOT_BAR  LC(LS(N5))        /* Cmd+Shift+5: screenshot toolbar */
+#define SHOT_WIN  LG(LS(S))         /* Windows: Win+Shift+S, Snipping Tool */
 
 / {
     behaviors {
@@ -228,7 +229,7 @@
         };
 
         /* SYS — hold either pinky-bottom key; the other hand does the action.
-         * BT0  BT1  BT2  BT3  BT4  |  ·   Shot  Sel  Clip  Bar
+         * BT0  BT1  BT2  BT3  BT4  | WinShot Shot Sel Clip Bar
          * USB  BLE  Tog LkMac LkPC |  ·  BTPrv BTNxt  ·    ·
          *(held) Clr Boot Rst   ·   |  ·   Rst  Boot   ·  (held)
          * Hold 29 for connections (left), 20 for screenshots / BT cycling (right).
@@ -238,7 +239,7 @@
         sys_layer {
             display-name = "Sys";
             bindings = <
-&bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &none          &kp SHOT_FULL  &kp SHOT_SEL   &kp SHOT_CLIP  &kp SHOT_BAR
+&bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4      &kp SHOT_WIN   &kp SHOT_FULL  &kp SHOT_SEL   &kp SHOT_CLIP  &kp SHOT_BAR
 &out OUT_USB   &out OUT_BLE   &out OUT_TOG   &kp LOCK_MAC   &kp LOCK_PC       &none          &bt BT_PRV     &bt BT_NXT     &none          &none
 &trans         &bt BT_CLR     &bootloader    &sys_reset     &none             &none          &sys_reset     &bootloader    &none          &trans
                               &none          &none                            &none          &none
