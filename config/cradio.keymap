@@ -183,8 +183,11 @@
          *  !    (    )    =    &   |  ·    ·    ;    :    ?
          *  ~    {    }    $    |   | (held) ·   *    /    >
          *           ⌫/⇧   @        |  _   ⏎/⇧
-         * If ` comes out as § (and ~ as ±) on macOS, the Mac thinks this is an ISO
-         * keyboard: set the keyboard type to ANSI in System Settings › Keyboard.
+         * If ` comes out as § (and ~ as ±) on macOS, the Mac has this keyboard saved as ISO.
+         * The type is stored per keyboard, so set Narsil's entry directly, then reboot:
+         *   sudo defaults write /Library/Preferences/com.apple.keyboardtype keyboardtype -dict-add "24926-7504-0" -int 40
+         * (24926-7504 = ZMK's default product/vendor ID, the same on every Mac and shared
+         *  by any ZMK board on default IDs; 40 = ANSI, 41 = ISO)
          */
         sym_layer {
             display-name = "Sym";
